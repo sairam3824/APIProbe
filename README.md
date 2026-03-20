@@ -76,4 +76,4 @@ lib/
 
 ## License
 
-MIT © Sairam Maruri
+MIT © Sai Rama Linga Reddy Maruri
