@@ -1,14 +1,3 @@
-export interface ApiKeyState {
-  id: string;
-  provider: string;
-  key: string;
-  maskedKey: string;
-  status: 'pending' | 'working' | 'invalid' | 'error';
-  models: string[];
-  lastCheckedAt: string;
-  errorMessage?: string;
-}
-
 export const PROVIDERS = [
   { id: 'openai', name: 'OpenAI', baseUrl: 'https://api.openai.com/v1' },
   { id: 'anthropic', name: 'Anthropic', baseUrl: 'https://api.anthropic.com/v1' },
@@ -31,19 +20,6 @@ async function fetchWithTimeout(url: string, options: RequestInit = {}): Promise
   } finally {
     clearTimeout(timer);
   }
-}
-
-export function getISTTimestamp() {
-  return new Intl.DateTimeFormat('en-IN', {
-    timeZone: 'Asia/Kolkata',
-    year: 'numeric',
-    month: 'short',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: true
-  }).format(new Date()) + ' IST';
 }
 
 export async function checkApiKey(providerId: string, apiKey: string): Promise<{
@@ -74,7 +50,7 @@ export async function checkApiKey(providerId: string, apiKey: string): Promise<{
         });
         if (response.ok) {
           const data = await response.json();
-          models = data.data?.map((m: any) => m.id) || [];
+          models = data.data?.map((m: { id: string }) => m.id) || [];
           return { status: 'working', models };
         }
         break;
@@ -89,7 +65,7 @@ export async function checkApiKey(providerId: string, apiKey: string): Promise<{
         });
         if (response.ok) {
           const data = await response.json();
-          models = data.data?.map((m: any) => m.id) || [];
+          models = data.data?.map((m: { id: string }) => m.id) || [];
           return { status: 'working', models };
         } else if (response.status === 401 || response.status === 403) {
           return { status: 'invalid', models: [], errorMessage: 'Invalid API Key' };
@@ -100,7 +76,7 @@ export async function checkApiKey(providerId: string, apiKey: string): Promise<{
         response = await fetchWithTimeout(`${provider.baseUrl}/models?key=${apiKey}`);
         if (response.ok) {
           const data = await response.json();
-          models = data.models?.map((m: any) => m.name?.split('/').pop() ?? m.name) || [];
+          models = data.models?.map((m: { name: string }) => m.name?.split('/').pop() ?? m.name) || [];
           return { status: 'working', models };
         }
         break;
