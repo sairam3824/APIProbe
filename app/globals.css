@@ -210,6 +210,9 @@ button:disabled {
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
   box-shadow: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .recheck-btn:hover {
