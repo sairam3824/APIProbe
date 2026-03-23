@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { PROVIDERS, getISTTimestamp } from "@/lib/api-checker";
+import { PROVIDERS } from "@/lib/api-checker";
 import { validateApiKeyAction, testSpecificModelAction } from "@/lib/actions";
 import { Key, TestTube, Play, CheckCircle2, XCircle, AlertTriangle, Zap, Search, Activity, Trash2, SquareCheck, Square } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -252,7 +252,7 @@ export default function TesterPage() {
                   const status = modelStatuses[m];
                   if (!status) return null;
                   const borderColor = status.status === 'working' ? '#10b981' : status.status === 'failed' ? '#ef4444' : status.status === 'error' ? '#f97316' : '#64748b';
-                  const badgeClass = status.status === 'working' ? 'status-working' : status.status === 'failed' ? 'status-error' : status.status === 'error' ? 'status-failed' : 'status-pending';
+                  const badgeClass = status.status === 'working' ? 'status-working' : status.status === 'failed' ? 'status-failed' : status.status === 'error' ? 'status-error' : 'status-pending';
                   return (
                     <motion.div
                       key={m}
